@@ -1,0 +1,56 @@
+---
+title: "Scaling_Function_Demo"
+output: html_document
+date: "2023-11-01"
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+This document explains the usage of the min_max_scaling function defined in the R script file within this repository.
+
+The function is tested on the USArrests data, a builtin R dataset on US crime statistics from 1974. 
+```{r, echo=FALSE,suppresswarn}
+library(tidyverse)
+#US Arrests - dataset of crime statistics from 1974 in USA
+data <- USArrests
+```
+
+
+The function is coded as follows:
+```{r cars}
+#function returns scaled value for each crime statistic observation, where max value is defined as input by user, each observations is transformed into its proportion of the max value 
+min_max_scaling <- function(data,max_value){
+  scaled_data <- data %>%
+    select(Murder, Assault, Rape) %>% 
+    mutate(Murder_Scaled = ((Murder - min(Murder))/(max(Murder)-min(Murder)))*max_value) %>% 
+    mutate(Assault_Scaled = ((Assault - min(Assault))/(max(Assault)-min(Assault)))*max_value) %>% 
+    mutate(Rape_Scaled = ((Rape - min(Rape))/(max(Rape)-min(Rape)))*max_value) %>% 
+    select(Murder_Scaled,Rape_Scaled,Assault_Scaled)
+  return(scaled_data)
+}
+```
+
+As seen, the function takes the arguments 'data' and 'max_value.' This second argument 'max_value' defines the maximum of the scaled data the function returns. 
+
+To demonstrate this, we can test the function for different max values, both large and small. Choosing different values is useful for relative comparison of crime across the USA.
+```{r}
+#max_value = 100
+min_max_scaling(data,100)
+```
+
+As seen above, choosing 100 as the max value transforms each observation into its percentage of highest observed crime rate. For instance, Vermont has just 8.43% the murder rate of the highest state, Georgia, which is 100%.
+
+The function also works for values less than 1, if that is what we want our maximum to be for data-analysis purposes. 
+```{r}
+#max_value = 0.5
+min_max_scaling(data,0.5)
+```
+
+
+
+
+
+
+
+
