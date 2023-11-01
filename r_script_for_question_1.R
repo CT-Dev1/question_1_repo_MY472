@@ -2,38 +2,20 @@ library(tidyverse)
 #US Arrests - dataset of crime statistics from 1974 in USA
 data <- USArrests
 
-<<<<<<< HEAD
-#loading the data
-data <- InsectSprays
-
-#defining function that outputs a table with the minimum insect prevalence recorded by each pesticide
-#two inputs - data and number of insect count to display in ascending order
-find_minimum_insects <- function(data,numbers_to_display){
-  data %>% 
-    group_by(spray) %>% 
-    arrange(count) %>% 
-    slice(1:numbers_to_display) %>% 
-    summarize(spray = spray, minimum = slice(1:numbers_to_display))
-    
-}
-
-#testing the function on InsectSprays data
-find_minimum_insects(data,3)
-=======
-#function to return scaled value for each crime statistic observation, where max value = 1 and min value = 0 
-min_max_scaling <- function(data){
+#function to return scaled value for each crime statistic observation, where max value is defined as input by user 
+min_max_scaling <- function(data,max_value){
   scaled_data <- data %>%
     select(Murder, Assault, Rape) %>% 
-    mutate(Murder_Scaled = (Murder - min(Murder))/(max(Murder)-min(Murder))) %>% 
-    mutate(Assault_Scaled = (Assault - min(Assault))/(max(Assault)-min(Assault))) %>% 
-    mutate(Rape_Scaled = (Rape - min(Rape))/(max(Rape)-min(Rape))) %>% 
+    mutate(Murder_Scaled = ((Murder - min(Murder))/(max(Murder)-min(Murder)))*max_value) %>% 
+    mutate(Assault_Scaled = ((Assault - min(Assault))/(max(Assault)-min(Assault)))*max_value) %>% 
+    mutate(Rape_Scaled = ((Rape - min(Rape))/(max(Rape)-min(Rape)))*max_value) %>% 
     select(Murder_Scaled,Rape_Scaled,Assault_Scaled)
   return(scaled_data)
 }
 
-min_max_scaling(data)
+#testing function for max_value = 100, ie. could to be used to find percentage of maximum observed crime for each crime
+min_max_scaling(data,100)
 
 
 
 
->>>>>>> e01091de014ee984de9b39503214f72c0670389d
