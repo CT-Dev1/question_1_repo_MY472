@@ -1,15 +1,20 @@
-#loading packages
 library(tidyverse)
+#US Arrests - dataset of crime statistics from 1974 in USA
+data <- USArrests
 
-#loading the data
-data <- InsectSprays
-
-#defining function that outputs a table with the minimum insect prevalence recorded by each pesticide 
-find_minimum_insects <- function(data){
-  data %>% 
-    group_by(spray) %>% 
-    summarize(Min_Insects = min(count))
+#function to return scaled value for each crime statistic observation, where max value = 1 and min value = 0 
+min_max_scaling <- function(data){
+  scaled_data <- data %>%
+    select(Murder, Assault, Rape) %>% 
+    mutate(Murder_Scaled = (Murder - min(Murder))/(max(Murder)-min(Murder))) %>% 
+    mutate(Assault_Scaled = (Assault - min(Assault))/(max(Assault)-min(Assault))) %>% 
+    mutate(Rape_Scaled = (Rape - min(Rape))/(max(Rape)-min(Rape))) %>% 
+    select(Murder_Scaled,Rape_Scaled,Assault_Scaled)
+  return(scaled_data)
 }
 
-#testing the function on InsectSprays data
-find_minimum_insects(data)
+min_max_scaling(data)
+
+
+
+
